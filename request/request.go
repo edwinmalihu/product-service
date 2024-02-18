@@ -17,5 +17,5 @@ type RequestUpdateProduct struct {
 }
 
 type RequesByIdProduct struct {
-	Id uint `form:"product_id"`
+	Id string `form:"product_id"`
 }

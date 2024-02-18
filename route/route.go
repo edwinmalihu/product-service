@@ -28,6 +28,8 @@ func SetupRoutes(db *gorm.DB) {
 	apiRoutes := httpRouter.Group("api/")
 	{
 		apiRoutes.POST("/add", productController.AddProduct)
+		apiRoutes.POST("/update", productController.UpdateProduct)
+		apiRoutes.GET("/detail", productController.DetailProduct)
 	}
 
 	httpRouter.Run(":8082")

@@ -5,6 +5,7 @@ import (
 
 	"product-service/model"
 	"product-service/request"
+	"product-service/response"
 
 	"gorm.io/gorm"
 )
@@ -15,7 +16,7 @@ type ProductRepo interface {
 	AddProductCategory(request.RequestAddProduct, uint) (model.Product_Category, error)
 	UpdateProduct(request.RequestUpdateProduct) (model.Product, error)
 	UpdateProductCateogry(request.RequestUpdateProduct) (model.Product_Category, error)
-	//DetailProduct(int) (response.ResponseDetailProduct, error)
+	DetailProduct(int) (response.ResponseDetailProduct, error)
 }
 
 type productRepo struct {
@@ -23,9 +24,9 @@ type productRepo struct {
 }
 
 // DetailProduct implements ProductRepo.
-// func (p productRepo) DetailProduct(req int) (data response.ResponseDetailProduct, err error) {
-// 	return data, p.DB.Raw("select p.name.description, from product as p")
-// }
+func (p productRepo) DetailProduct(req int) (data response.ResponseDetailProduct, err error) {
+	return data, p.DB.Raw("select p.name, p.description, p.price, p.stok, c.category from product as p join product_category as pc on p.id = pc.product_id join category as c on pc.category_id = c.id where p.id = ?", req).Scan(&data).Error
+}
 
 // UpdateProductCateogry implements ProductRepo.
 func (p productRepo) UpdateProductCateogry(req request.RequestUpdateProduct) (data model.Product_Category, err error) {
