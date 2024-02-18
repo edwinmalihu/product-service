@@ -2,6 +2,7 @@ package route
 
 import (
 	"log"
+	"product-service/controller"
 	"product-service/middleware"
 	"product-service/repository"
 
@@ -20,6 +21,13 @@ func SetupRoutes(db *gorm.DB) {
 	productRepository := repository.NewProductRepo(db)
 	if err := productRepository.Migrate(); err != nil {
 		log.Fatal("Product migrate err", err)
+	}
+
+	productController := controller.NewProductRepo(productRepository)
+
+	apiRoutes := httpRouter.Group("api/")
+	{
+		apiRoutes.POST("/add", productController.AddProduct)
 	}
 
 	httpRouter.Run(":8082")
