@@ -19,3 +19,6 @@ type RequestUpdateProduct struct {
 type RequesByIdProduct struct {
 	Id string `form:"product_id"`
 }
+type RequesByIdCategory struct {
+	Id string `form:"category_id"`
+}

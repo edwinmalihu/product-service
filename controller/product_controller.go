@@ -15,10 +15,41 @@ type ProductController interface {
 	AddProduct(*gin.Context)
 	UpdateProduct(*gin.Context)
 	DetailProduct(*gin.Context)
+	ListProduct(*gin.Context)
+	ListProductByCategory(*gin.Context)
 }
 
 type productController struct {
 	prodRepo repository.ProductRepo
+}
+
+// ListProductByCategory implements ProductController.
+func (p productController) ListProductByCategory(ctx *gin.Context) {
+	var req request.RequesByIdCategory
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	id, _ := strconv.Atoi(req.Id)
+	data, err := p.prodRepo.ListProductByCategory(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
+}
+
+// ListProduct implements ProductController.
+func (p productController) ListProduct(ctx *gin.Context) {
+	data, err := p.prodRepo.ListProduct()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
+
 }
 
 // DetailProduct implements ProductController.

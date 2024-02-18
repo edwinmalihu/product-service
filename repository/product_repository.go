@@ -17,10 +17,22 @@ type ProductRepo interface {
 	UpdateProduct(request.RequestUpdateProduct) (model.Product, error)
 	UpdateProductCateogry(request.RequestUpdateProduct) (model.Product_Category, error)
 	DetailProduct(int) (response.ResponseDetailProduct, error)
+	ListProduct() ([]response.ResponseDetailProduct, error)
+	ListProductByCategory(int) ([]response.ResponseDetailProduct, error)
 }
 
 type productRepo struct {
 	DB *gorm.DB
+}
+
+// ListProductByCategory implements ProductRepo.
+func (p productRepo) ListProductByCategory(req int) (data []response.ResponseDetailProduct, err error) {
+	return data, p.DB.Raw("select p.name, p.description, p.price, p.stok, c.category from product as p join product_category as pc on p.id = pc.product_id join category as c on pc.category_id = c.id where c.id = ?", req).Scan(&data).Error
+}
+
+// ListProduct implements ProductRepo.
+func (p productRepo) ListProduct() (data []response.ResponseDetailProduct, err error) {
+	return data, p.DB.Raw("select p.name, p.description, p.price, p.stok, c.category from product as p join product_category as pc on p.id = pc.product_id join category as c on pc.category_id = c.id").Scan(&data).Error
 }
 
 // DetailProduct implements ProductRepo.
