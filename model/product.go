@@ -17,7 +17,7 @@ type Product struct {
 
 type Product_Category struct {
 	gorm.Model
-	ProductID  uint     `json:"category_id"`
+	ProductID  uint     `json:"product_id"`
 	CategoryID uint     `json:"category_id"`
 	Product    Product  `gorm:"foreignKey:ProductID"`
 	Category   Category `gorm:"foreignKey:CategoryID"`
