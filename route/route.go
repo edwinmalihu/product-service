@@ -1,7 +1,9 @@
 package route
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"product-service/controller"
 	"product-service/middleware"
 	"product-service/repository"
@@ -34,5 +36,6 @@ func SetupRoutes(db *gorm.DB) {
 		apiRoutes.GET("/list-ProductByCategory", productController.ListProductByCategory)
 	}
 
-	httpRouter.Run(":8082")
+	httpRouter.Run(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT")))
+	// httpRouter.Run(":8082")
 }
